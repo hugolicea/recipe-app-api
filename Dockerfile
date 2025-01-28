@@ -15,8 +15,7 @@ RUN python -m venv /py
 RUN /py/bin/pip install --upgrade pip
 
 # Debug step to check the contents of requirements.txt
-RUN /tmp/requirements.txt
-
+RUN cat /tmp/requirements.txt
 
 # Debug step to check the Python and pip versions
 RUN /py/bin/python --version && /py/bin/pip --version
