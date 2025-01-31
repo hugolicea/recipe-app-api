@@ -2,6 +2,7 @@ FROM python:3.12-alpine3.21 AS builder
 LABEL maintainer="hugo.licea@gmail.com"
 
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
