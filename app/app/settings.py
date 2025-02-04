@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'core',
     'user',
+    'recipe',
 ]
 
 MIDDLEWARE = [
@@ -254,3 +255,9 @@ REST_FRAMEWORK = {
 }
 
 # Spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API',
+    # 'DESCRIPTION': 'Recipe description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+}
