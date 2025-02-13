@@ -1,0 +1,47 @@
+# version: "3.9"
+
+services:
+  # Define the app service
+  app:
+    build:
+      context: .
+    restart: always  # Always restart the container if it stops
+    volumes:
+      - static-data:/vol/web  # Mount the static-data volume to /vol/web in the container
+    environment:
+      - DB_HOST=db  # Set the database host environment variable
+      - DB_NAME=${DB_NAME}  # Set the database name environment variable
+      - DB_USER=${DB_USER}  # Set the database user environment variable
+      - DB_PASS=${DB_PASS}  # Set the database password environment variable
+      - SECRET_KEY=${DJANGO_SECRET_KEY}  # Set the Django secret key environment variable
+      - ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}  # Set the allowed hosts environment variable
+    depends_on:
+      - db  # Ensure the db service is started before the app service
+
+  # Define the db service
+  db:
+    image: postgres:13-alpine  # Use the official PostgreSQL image
+    restart: always  # Always restart the container if it stops
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Mount the postgres-data volume to /var/lib/postgresql/data in the container
+    environment:
+      - POSTGRES_DB=${DB_NAME}  # Set the PostgreSQL database name
+      - POSTGRES_USER=${DB_USER}  # Set the PostgreSQL user
+      - POSTGRES_PASSWORD=${DB_PASS}  # Set the PostgreSQL password
+
+  # Define the proxy service
+  proxy:
+    build:
+      context: ./proxy
+    restart: always  # Always restart the container if it stops
+    depends_on:
+      - app  # Ensure the app service is started before the proxy service
+    ports:
+      - "8000:8000"  # Map port 8000 on the host to port 8000 in the container
+    volumes:
+      - static-data:/vol/static  # Mount the static-data volume to /vol/static in the container
+
+# Define the named volumes
+volumes:
+  postgres-data:  # Volume for PostgreSQL data
+  static-data:  # Volume for static data
